@@ -60,7 +60,7 @@ public class FUN3KochFractalFX extends Application {
     private final WritableImage image = new WritableImage(kpWidth, kpHeight);
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
        
         // Define grid pane
         GridPane grid;
@@ -105,7 +105,11 @@ public class FUN3KochFractalFX extends Application {
         buttonIncreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                increaseLevelButtonActionPerformed(event);
+                try {
+                    increaseLevelButtonActionPerformed(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         grid.add(buttonIncreaseLevel, 3, 6);
@@ -116,7 +120,11 @@ public class FUN3KochFractalFX extends Application {
         buttonDecreaseLevel.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                decreaseLevelButtonActionPerformed(event);
+                try {
+                    decreaseLevelButtonActionPerformed(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         grid.add(buttonDecreaseLevel, 5, 6);
@@ -234,7 +242,7 @@ public class FUN3KochFractalFX extends Application {
         });
     }
     
-    private void increaseLevelButtonActionPerformed(ActionEvent event) {
+    private void increaseLevelButtonActionPerformed(ActionEvent event) throws Exception {
         if (currentLevel < 12) {
             // resetZoom();
             currentLevel++;
@@ -243,7 +251,7 @@ public class FUN3KochFractalFX extends Application {
         }
     } 
     
-    private void decreaseLevelButtonActionPerformed(ActionEvent event) {
+    private void decreaseLevelButtonActionPerformed(ActionEvent event) throws Exception {
         if (currentLevel > 1) {
             // resetZoom();
             currentLevel--;

@@ -1,25 +1,48 @@
 package edges;
 
+import calculate.Edge;
 import calculate.KochFractal;
 import calculate.KochManager;
+import javafx.concurrent.Task;
 
-public class RightEdgeTask implements Runnable{
+import java.util.ArrayList;
+import java.util.List;
 
-    private KochFractal koch;
-    private KochManager manager;
+public class RightEdgeTask extends Task implements Runnable{
 
-    public RightEdgeTask(KochFractal koch, KochManager manager){
+    private final List<Edge> edges = new ArrayList<>();
+    private final KochFractal koch;
+    private final KochManager kochManager;
+
+    public RightEdgeTask(KochFractal koch, KochManager kochManager){
         this.koch = koch;
-        this.manager = manager;
+        this.kochManager = kochManager;
     }
 
     @Override
     public void run() {
         try{
-            koch.generateRightEdge();
+            koch.generateRightEdge(edges);
         } catch (Exception e) {
             System.out.println(e);
         }
-        manager.setCount();
+        try {
+            kochManager.setCount();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Edge> getEdges() {
+        return edges;
+    }
+
+    public KochFractal getKoch() {
+        return koch;
+    }
+
+    @Override
+    public Object call() throws Exception {
+        return edges;
     }
 }

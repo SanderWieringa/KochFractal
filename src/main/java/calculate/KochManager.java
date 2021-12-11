@@ -5,6 +5,7 @@
 package calculate;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,31 +22,35 @@ import timeutil.TimeStamp;
  * Modified for FUN3 by Gertjan Schouten
  */
 public class KochManager {
-    
-    private KochFractal koch;
-    private ArrayList<Edge> edges;
-    private FUN3KochFractalFX application;
-    private TimeStamp tsCalc;
-    private TimeStamp tsDraw;
-    private int count = 0;
 
+    private final List<Edge> edges;
+    private final FUN3KochFractalFX application;
+    private final TimeStamp tsCalc;
+    private final TimeStamp tsDraw;
+    private int count = 0;
+    private BottomEdgeTask bottomEdgeTask;
+    private LeftEdgeTask leftEdgeTask;
+    private RightEdgeTask rightEdgeTask;
     
     public KochManager(FUN3KochFractalFX application) {
         this.edges = new ArrayList<>();
-        this.koch = new KochFractal(this);
         this.application = application;
         this.tsCalc = new TimeStamp();
         this.tsDraw = new TimeStamp();
     }
 
-    public synchronized void setCount() {
+    public synchronized void setCount() throws Exception {
         this.count++;
         if (count == 3) {
+            edges.addAll((ArrayList<Edge>)bottomEdgeTask.call());
+            edges.addAll((ArrayList<Edge>)leftEdgeTask.call());
+            edges.addAll((ArrayList<Edge>)rightEdgeTask.call());
+
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
                     tsCalc.setEnd("End calculating");
-                    application.setTextNrEdges("" + koch.getNrOfEdges());
+                    application.setTextNrEdges("" + bottomEdgeTask.getKoch().getNrOfEdges());
                     application.setTextCalc(tsCalc.toString());
                 }
             });
@@ -54,16 +59,26 @@ public class KochManager {
         }
     }
     
-    public void changeLevel(int nxt) {
+    public void changeLevel(int nxt) throws Exception {
+        if (bottomEdgeTask != null) {
+            bottomEdgeTask.cancel();
+        }
+        if (leftEdgeTask != null) {
+            leftEdgeTask.cancel();
+        }
+        if (rightEdgeTask != null) {
+            rightEdgeTask.cancel();
+        }
+
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         edges.clear();
-        koch.setLevel(nxt);
+        application.clearKochPanel();
         tsCalc.init();
         tsCalc.setBegin("Begin calculating");
 
-        executorService.execute(new BottomEdgeTask(koch, this));
-        executorService.execute(new LeftEdgeTask(koch, this));
-        executorService.execute(new RightEdgeTask(koch, this));
+        executorService.execute(bottomEdgeTask = new BottomEdgeTask(new KochFractal(nxt), this));
+        executorService.execute(leftEdgeTask = new LeftEdgeTask(new KochFractal(nxt), this));
+        executorService.execute(rightEdgeTask = new RightEdgeTask(new KochFractal(nxt), this));
         executorService.shutdown();
     }
     
@@ -76,9 +91,5 @@ public class KochManager {
         }
         tsDraw.setEnd("End drawing");
         application.setTextDraw(tsDraw.toString());
-    }
-    
-    public void addEdge(Edge e) {
-        edges.add(e);
     }
 }
