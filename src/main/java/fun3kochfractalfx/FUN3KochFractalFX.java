@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
@@ -48,6 +49,12 @@ public class FUN3KochFractalFX extends Application {
     private Label labelCalcText;
     private Label labelDraw;
     private Label labelDrawText;
+    private Label bottomLabel;
+    private Label leftLabel;
+    private Label rightLabel;
+    private ProgressBar bottomProgressBar;
+    private ProgressBar leftProgressBar;
+    private ProgressBar rightProgressBar;
     
     // Koch panel and its size
     private Canvas kochPanel;
@@ -139,6 +146,24 @@ public class FUN3KochFractalFX extends Application {
             }
         });
         grid.add(buttonFitFractal, 14, 6);
+
+        bottomLabel = new Label();
+        bottomLabel.setText("Progress bottom:");
+        bottomProgressBar = new ProgressBar();
+        grid.add(bottomLabel,3,7);
+        grid.add(bottomProgressBar,5,7);
+
+        leftLabel = new Label();
+        leftLabel.setText("Progress left:");
+        leftProgressBar = new ProgressBar();
+        grid.add(leftLabel,3,8);
+        grid.add(leftProgressBar,5,8);
+
+        rightLabel = new Label();
+        rightLabel.setText("Progress right:");
+        rightProgressBar = new ProgressBar();
+        grid.add(rightLabel,3,9);
+        grid.add(rightProgressBar,5,9);
         
         // Add mouse clicked event to Koch panel
         kochPanel.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -173,7 +198,7 @@ public class FUN3KochFractalFX extends Application {
         
         // Create the scene and add the grid pane
         Group root = new Group();
-        Scene scene = new Scene(root, kpWidth+50, kpHeight+170);
+        Scene scene = new Scene(root, kpWidth+50, kpHeight+260);
         root.getChildren().add(grid);
         
         // Define title and assign the scene for main window
