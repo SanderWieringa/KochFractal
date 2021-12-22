@@ -8,11 +8,12 @@ import javafx.concurrent.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeftEdgeTask extends Task implements Runnable{
+public class LeftEdgeTask extends Task implements IObserver, Runnable{
 
     private final List<Edge> edges = new ArrayList<>();
     private final KochFractal koch;
     private final KochManager kochManager;
+    private int progress;
 
     public LeftEdgeTask(KochFractal koch, KochManager kochManager){
         this.koch = koch;
@@ -44,5 +45,10 @@ public class LeftEdgeTask extends Task implements Runnable{
     @Override
     public Object call() throws Exception {
         return edges;
+    }
+
+    @Override
+    public void update() {
+
     }
 }

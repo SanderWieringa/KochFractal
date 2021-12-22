@@ -13,6 +13,7 @@ public class RightEdgeTask extends Task implements Runnable{
     private final List<Edge> edges = new ArrayList<>();
     private final KochFractal koch;
     private final KochManager kochManager;
+    private int progress;
 
     public RightEdgeTask(KochFractal koch, KochManager kochManager){
         this.koch = koch;

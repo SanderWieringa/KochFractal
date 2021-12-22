@@ -245,6 +245,30 @@ public class FUN3KochFractalFX extends Application {
             counter = 0;
         }
     }
+
+    public ProgressBar getBottomProgressBar() {
+        return bottomProgressBar;
+    }
+
+    public ProgressBar getLeftProgressBar() {
+        return leftProgressBar;
+    }
+
+    public ProgressBar getRightProgressBar() {
+        return rightProgressBar;
+    }
+
+    public Label getBottomLabel() {
+        return bottomLabel;
+    }
+
+    public Label getLeftLabel() {
+        return leftLabel;
+    }
+
+    public Label getRightLabel() {
+        return rightLabel;
+    }
     
     public void setTextNrEdges(String text) {
         labelNrEdgesText.setText(text);

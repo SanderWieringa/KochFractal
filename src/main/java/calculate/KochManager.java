@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import edges.BottomEdgeTask;
+import edges.IObserver;
 import edges.LeftEdgeTask;
 import edges.RightEdgeTask;
 import fun3kochfractalfx.FUN3KochFractalFX;
@@ -21,7 +22,7 @@ import timeutil.TimeStamp;
  * @author Nico Kuijpers
  * Modified for FUN3 by Gertjan Schouten
  */
-public class KochManager {
+public class KochManager implements ISubject{
 
     private final List<Edge> edges;
     private final FUN3KochFractalFX application;
@@ -31,6 +32,7 @@ public class KochManager {
     private BottomEdgeTask bottomEdgeTask;
     private LeftEdgeTask leftEdgeTask;
     private RightEdgeTask rightEdgeTask;
+    private List<IObserver> subs = new ArrayList<>();
     
     public KochManager(FUN3KochFractalFX application) {
         this.edges = new ArrayList<>();
@@ -91,5 +93,22 @@ public class KochManager {
         }
         tsDraw.setEnd("End drawing");
         application.setTextDraw(tsDraw.toString());
+    }
+
+    @Override
+    public void subscribe(IObserver sub) {
+        subs.add(sub);
+    }
+
+    @Override
+    public void unsubscribe(IObserver sub) {
+        subs.remove(sub);
+    }
+
+    @Override
+    public void notifySubs() {
+        for (IObserver sub : subs) {
+            sub.update();
+        }
     }
 }
