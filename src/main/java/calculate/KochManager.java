@@ -31,7 +31,7 @@ public class KochManager {
     private BottomEdgeTask bottomEdgeTask;
     private LeftEdgeTask leftEdgeTask;
     private RightEdgeTask rightEdgeTask;
-    ExecutorService executorService;
+    private ExecutorService executorService;
     
     public KochManager(FUN3KochFractalFX application) {
         this.edges = new ArrayList<>();
