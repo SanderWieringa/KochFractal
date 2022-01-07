@@ -4,6 +4,7 @@ import calculate.Edge;
 import calculate.KochFractal;
 import calculate.KochManager;
 import javafx.concurrent.Task;
+import javafx.scene.control.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,13 @@ public class LeftEdgeTask extends Task implements IObserver, Runnable{
     private final KochFractal koch;
     private final KochManager kochManager;
     private int progress;
+    ProgressBar leftProgressBar;
 
-    public LeftEdgeTask(KochFractal koch, KochManager kochManager){
+    public LeftEdgeTask(KochFractal koch, KochManager kochManager, ProgressBar leftProgressBar){
         this.koch = koch;
         this.kochManager = kochManager;
+        this.leftProgressBar = leftProgressBar;
+        koch.subscribe(this);
     }
 
     @Override
@@ -49,6 +53,7 @@ public class LeftEdgeTask extends Task implements IObserver, Runnable{
 
     @Override
     public void update() {
-
+        progress += 0.1;
+        leftProgressBar.setProgress(progress);
     }
 }

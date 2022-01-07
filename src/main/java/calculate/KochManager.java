@@ -22,7 +22,7 @@ import timeutil.TimeStamp;
  * @author Nico Kuijpers
  * Modified for FUN3 by Gertjan Schouten
  */
-public class KochManager implements ISubject{
+public class KochManager{
 
     private final List<Edge> edges;
     private final FUN3KochFractalFX application;
@@ -32,7 +32,6 @@ public class KochManager implements ISubject{
     private BottomEdgeTask bottomEdgeTask;
     private LeftEdgeTask leftEdgeTask;
     private RightEdgeTask rightEdgeTask;
-    private List<IObserver> subs = new ArrayList<>();
     
     public KochManager(FUN3KochFractalFX application) {
         this.edges = new ArrayList<>();
@@ -63,14 +62,18 @@ public class KochManager implements ISubject{
     
     public void changeLevel(int nxt) throws Exception {
         if (bottomEdgeTask != null) {
-            bottomEdgeTask.cancel();
+            bottomEdgeTask.getKoch().cancel();
         }
         if (leftEdgeTask != null) {
-            leftEdgeTask.cancel();
+            leftEdgeTask.getKoch().cancel();
         }
         if (rightEdgeTask != null) {
-            rightEdgeTask.cancel();
+            rightEdgeTask.getKoch().cancel();
         }
+
+        application.getLeftProgressBar().setProgress(0);
+        application.getRightProgressBar().setProgress(0);
+        application.getBottomProgressBar().setProgress(0);
 
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         edges.clear();
@@ -78,9 +81,9 @@ public class KochManager implements ISubject{
         tsCalc.init();
         tsCalc.setBegin("Begin calculating");
 
-        executorService.execute(bottomEdgeTask = new BottomEdgeTask(new KochFractal(nxt), this));
-        executorService.execute(leftEdgeTask = new LeftEdgeTask(new KochFractal(nxt), this));
-        executorService.execute(rightEdgeTask = new RightEdgeTask(new KochFractal(nxt), this));
+        executorService.execute(bottomEdgeTask = new BottomEdgeTask(new KochFractal(nxt), this, application.getBottomProgressBar()));
+        executorService.execute(leftEdgeTask = new LeftEdgeTask(new KochFractal(nxt), this, application.getLeftProgressBar()));
+        executorService.execute(rightEdgeTask = new RightEdgeTask(new KochFractal(nxt), this, application.getRightProgressBar()));
         executorService.shutdown();
     }
     
@@ -93,22 +96,5 @@ public class KochManager implements ISubject{
         }
         tsDraw.setEnd("End drawing");
         application.setTextDraw(tsDraw.toString());
-    }
-
-    @Override
-    public void subscribe(IObserver sub) {
-        subs.add(sub);
-    }
-
-    @Override
-    public void unsubscribe(IObserver sub) {
-        subs.remove(sub);
-    }
-
-    @Override
-    public void notifySubs() {
-        for (IObserver sub : subs) {
-            sub.update();
-        }
     }
 }

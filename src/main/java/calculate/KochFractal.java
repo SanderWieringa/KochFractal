@@ -4,8 +4,10 @@
  */
 package calculate;
 
+import edges.IObserver;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,12 +15,13 @@ import java.util.List;
  * @author Peter Boots
  * Modified for FUN3 by Gertjan Schouten
  */
-public class KochFractal {
+public class KochFractal implements ISubject{
 
     private int level;      // The current level of the fractal
     private int nrOfEdges = 3;  // The number of edges in the current level of the fractal
     private float hue;          // Hue value of color for next edge
     private boolean cancelled;  // Flag to indicate that calculation has been cancelled
+    private List<IObserver> subs = new ArrayList<>();
 
     private void drawKochEdge(double ax, double ay, double bx, double by, int n, List<Edge> edges) {
         if (!cancelled) {
@@ -26,6 +29,7 @@ public class KochFractal {
                 hue = hue + 1.0f / nrOfEdges;
                 Edge e = new Edge(ax, ay, bx, by, Color.hsb(hue*360.0, 1.0, 1.0));
                 edges.add(e);
+                notifySubs();
             } else {
                 double angle = Math.PI / 3.0 + Math.atan2(by - ay, bx - ax);
                 double distabdiv3 = Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)) / 3;
@@ -79,5 +83,22 @@ public class KochFractal {
 
     public int getNrOfEdges() {
         return nrOfEdges;
+    }
+
+    @Override
+    public void subscribe(IObserver sub) {
+        subs.add(sub);
+    }
+
+    @Override
+    public void unsubscribe(IObserver sub) {
+        subs.remove(sub);
+    }
+
+    @Override
+    public void notifySubs() {
+        for (IObserver sub : subs) {
+            sub.update();
+        }
     }
 }

@@ -4,20 +4,24 @@ import calculate.Edge;
 import calculate.KochFractal;
 import calculate.KochManager;
 import javafx.concurrent.Task;
+import javafx.scene.control.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BottomEdgeTask extends Task implements Runnable{
+public class BottomEdgeTask extends Task implements IObserver, Runnable{
 
     private final List<Edge> edges = new ArrayList<>();
     private final KochFractal koch;
     private final KochManager kochManager;
-    private int progress;
+    private int progress = 0;
+    ProgressBar bottomProgressBar;
 
-    public BottomEdgeTask(KochFractal koch, KochManager kochManager){
+    public BottomEdgeTask(KochFractal koch, KochManager kochManager, ProgressBar bottomProgressBar){
         this.koch = koch;
         this.kochManager = kochManager;
+        this.bottomProgressBar = bottomProgressBar;
+        koch.subscribe(this);
     }
 
     @Override
@@ -45,5 +49,11 @@ public class BottomEdgeTask extends Task implements Runnable{
     @Override
     public Object call() throws Exception {
         return edges;
+    }
+
+    @Override
+    public void update() {
+        progress += 0.1;
+        bottomProgressBar.setProgress(progress);
     }
 }
