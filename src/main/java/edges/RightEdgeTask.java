@@ -21,7 +21,6 @@ public class RightEdgeTask extends Task implements IObserver, Runnable{
         this.kochManager = kochManager;
         this.rightProgressBar = rightProgressBar;
         koch.subscribe(this);
-        this.progress = 0;
     }
 
     @Override

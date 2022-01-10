@@ -21,7 +21,6 @@ public class BottomEdgeTask extends Task implements IObserver, Runnable{
         this.kochManager = kochManager;
         this.bottomProgressBar = bottomProgressBar;
         koch.subscribe(this);
-        this.progress = 0;
     }
 
     @Override

@@ -32,12 +32,18 @@ public class KochManager{
     private BottomEdgeTask bottomEdgeTask;
     private LeftEdgeTask leftEdgeTask;
     private RightEdgeTask rightEdgeTask;
+    private ExecutorService executorService;
     
     public KochManager(FUN3KochFractalFX application) {
         this.edges = new ArrayList<>();
         this.application = application;
         this.tsCalc = new TimeStamp();
         this.tsDraw = new TimeStamp();
+        executorService = Executors.newFixedThreadPool(3);
+    }
+
+    public void shutdown() {
+        executorService.shutdown();
     }
 
     public synchronized void setCount() throws Exception {
@@ -75,16 +81,14 @@ public class KochManager{
         application.getRightProgressBar().setProgress(0);
         application.getBottomProgressBar().setProgress(0);
 
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
         edges.clear();
         application.clearKochPanel();
         tsCalc.init();
         tsCalc.setBegin("Begin calculating");
 
-        executorService.execute(bottomEdgeTask = new BottomEdgeTask(new KochFractal(nxt),  this, application.getBottomProgressBar()));
+        executorService.execute(bottomEdgeTask = new BottomEdgeTask(new KochFractal(nxt), this, application.getBottomProgressBar()));
         executorService.execute(leftEdgeTask = new LeftEdgeTask(new KochFractal(nxt), this, application.getLeftProgressBar()));
         executorService.execute(rightEdgeTask = new RightEdgeTask(new KochFractal(nxt), this, application.getRightProgressBar()));
-        executorService.shutdown();
     }
     
     public void drawEdges() {

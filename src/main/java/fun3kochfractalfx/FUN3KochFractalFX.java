@@ -17,6 +17,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
@@ -205,6 +206,14 @@ public class FUN3KochFractalFX extends Application {
         primaryStage.setTitle("Koch Fractal");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            public void handle(WindowEvent we) {
+                System.out.println("shutting down");
+                primaryStage.close();
+                kochManager.shutdown();
+            }
+        });
+
     }
     
     public void clearKochPanel() {
