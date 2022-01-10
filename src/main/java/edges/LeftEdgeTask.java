@@ -15,6 +15,7 @@ public class LeftEdgeTask extends Task implements IObserver, Runnable{
     private final KochManager kochManager;
     private double progress;
     ProgressBar leftProgressBar;
+    double count = 0;
 
     public LeftEdgeTask(KochFractal koch, KochManager kochManager, ProgressBar leftProgressBar){
         this.koch = koch;
@@ -52,7 +53,8 @@ public class LeftEdgeTask extends Task implements IObserver, Runnable{
 
     @Override
     public void update() {
-        progress = progress + 0.1;
+        count++;
+        progress = (count / (koch.getNrOfEdges() / 3.0));
         leftProgressBar.setProgress(progress);
     }
 }
