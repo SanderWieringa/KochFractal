@@ -5,7 +5,6 @@ import calculate.KochFractal;
 import calculate.KochManager;
 import javafx.concurrent.Task;
 import javafx.scene.control.ProgressBar;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +21,12 @@ public class LeftEdgeTask extends Task implements IObserver, Runnable{
         this.kochManager = kochManager;
         this.leftProgressBar = leftProgressBar;
         koch.subscribe(this);
+        this.progress = 0;
     }
 
     @Override
     public void run() {
-        try{
+        try {
             koch.generateLeftEdge(edges);
         } catch (Exception e) {
             System.out.println(e);
