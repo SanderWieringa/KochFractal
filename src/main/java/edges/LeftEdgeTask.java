@@ -8,7 +8,7 @@ import javafx.scene.control.ProgressBar;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeftEdgeTask extends Task implements IObserver, Runnable{
+public class LeftEdgeTask extends Task implements IObserver{
 
     private final List<Edge> edges = new ArrayList<>();
     private final KochFractal koch;

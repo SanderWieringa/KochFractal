@@ -86,9 +86,9 @@ public class KochManager{
         tsCalc.init();
         tsCalc.setBegin("Begin calculating");
 
-        executorService.execute(bottomEdgeTask = new BottomEdgeTask(new KochFractal(nxt), this, application.getBottomProgressBar()));
-        executorService.execute(leftEdgeTask = new LeftEdgeTask(new KochFractal(nxt), this, application.getLeftProgressBar()));
-        executorService.execute(rightEdgeTask = new RightEdgeTask(new KochFractal(nxt), this, application.getRightProgressBar()));
+        executorService.submit(bottomEdgeTask = new BottomEdgeTask(new KochFractal(nxt), this, application.getBottomProgressBar()));
+        executorService.submit(leftEdgeTask = new LeftEdgeTask(new KochFractal(nxt), this, application.getLeftProgressBar()));
+        executorService.submit(rightEdgeTask = new RightEdgeTask(new KochFractal(nxt), this, application.getRightProgressBar()));
     }
     
     public void drawEdges() {
