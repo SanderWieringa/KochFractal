@@ -28,10 +28,6 @@ public class RightEdgeTask extends Task implements IObserver, Runnable{
     public void run() {
         try{
             koch.generateRightEdge(edges);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        try {
             kochManager.setCount();
         } catch (Exception e) {
             e.printStackTrace();
